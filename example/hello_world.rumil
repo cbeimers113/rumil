@@ -1,19 +1,26 @@
+~ Defining an entity: each program must have exactly one Main
 Main {
 
-    ~ Program entry point: Main's init takes args as string array
-    init(args: strings) {
-        print("Hello, world!");
+    ~ Program entry point: Main's constructor takes args as a text (string) array.
+    ~ Constructors are labelled with the plus symbol.
+    ~ The constructor is a reflexive method, so its arguments are indirect objects (immutable).
+    ~ Indirect objects are listed in a method signature inside parentheses.
+    +(args: texts) {
+        ~ The builtin print operator ($) takes a text as its indirect object.
+        $("Hello, world!"); ~ Statements end with a semicolon.
 
-        ~ Flow control
-        if #args > 1 {
-            print("Args:");
+        ~ Flow control: present a condition with a question mark to open a branch.
+        ~ The builtin size operator (#) takes a variable as its indirect object.
+        ~ For collections, it returns the number of elements inside.
+        #(args) > 1 ? {
+            $("Args:");
 
-            ~ Iterative (synchronous "for") loop
+            ~ Iterative (synchronous "for") loop.
             arg <- args {
                 print(arg);
             }
-        } else {
-            print("No args supplied");
+        } ? {
+            $("No args supplied");
         }
     }
 }
