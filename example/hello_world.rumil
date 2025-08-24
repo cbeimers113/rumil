@@ -1,26 +1,92 @@
-~ Defining an entity: each program must have exactly one Main
+~ Defining an entity type: each program must have exactly one Main
 Main {
 
-    ~ Program entry point: Main's constructor takes args as a text (string) array.
+    ~ Program entry point: Main's constructor takes args as a string array.
     ~ Constructors are labelled with the plus symbol.
-    ~ The constructor is a reflexive method, so its arguments are indirect objects (immutable).
-    ~ Indirect objects are listed in a method signature inside parentheses.
-    +(args: texts) {
-        ~ The builtin print operator ($) takes a text as its indirect object.
+    ~ The constructor is a reflexive method, and its poaitional arguments are optional.
+    ~ Reflexive methods have a single required mutable argument - the instance (unlisted).
+    ~ Reflexive methods other than the constructor or destructor are marked with the reflexor operator (@).
+    +(args: [s]) {
+        ~ The builtin print operator ($) takes a variadic string array as its argument.
         $("Hello, world!"); ~ Statements end with a semicolon.
 
         ~ Flow control: present a condition with a question mark to open a branch.
-        ~ The builtin size operator (#) takes a variable as its indirect object.
+        ~ The builtin size operator (#) takes a variable as its argument.
         ~ For collections, it returns the number of elements inside.
-        #(args) > 1 ? {
+        #(args) > 0 ? {
             $("Args:");
 
             ~ Iterative (synchronous "for") loop.
-            arg <- args {
-                print(arg);
+            ~ The "each" index (,) yields an iterator for every element of the array.
+            ~ The receptacle operator (:=) assigns the iterator's value to a variable.
+            args[,] := arg {
+                $(arg);
             }
         } ? {
             $("No args supplied");
         }
+    }
+
+    ~ Defining a transitive (mutating) method: a mutating method requires at least one direct object argument.
+    ~ The direct object is a reference type (entity or collection), and can be mutated by the function.
+    ~ Indirect objects are optional. This function takes one direct and one indirect object, and has no return type.
+    ~ Direct objects are listed after the indirect objects via the accusative operator (|>).
+    ~ The caller has to pass the direct object(s) this way as well, ie: give_name("Bobby") |> bob
+    give_name(name: s) |> person: _Person {
+        person.name = name;
+    }
+
+    ~ Defining a method with a return type
+    fib(n: i) => i {
+        n <= 0 ? {
+            ~ The return operator is =>
+            => 0;
+        } n <= 2 ? {
+            => 1;
+        }
+
+        => fib(n-1) + fib(n-2);
+    }
+
+    ~ Defining a method with multiple return types.
+    ~ This method simulates drawing cards from a deck.
+    ~ It takes a score limit to draw to along with a (presumably) shuffled
+    ~ card deck integer array, and repeatedly picks up the next card until
+    ~ either the deck is empty, or the limit has been reached.
+    ~ It returns the score that was drawn, and whether the limit was hit right on.
+    draw_cards(limit: i) |> cards: [i] => i, b {
+        score: i;
+
+        ~ Contingent ("do until") loop
+        {
+            ~ The builtin pop operator for arrays is <-
+            card: i <- cards;
+            score += card;
+        }... score >= limit || #(cards) == 0;
+
+        => score, score == limit;
+    }
+}
+
+~ Defining a private type (only accessible in this file).
+~ Types and fields are made private with the underscore.
+_Person {
+
+    ~ Declaring some fields; all types have default 0-equivalent values
+    name: s; ~ String name (default "")
+    age: i; ~ Int age (default 0)
+    score: f; ~ Float score (default 0.0)
+    _ready: b; ~ Private bool ready (default false)
+
+    +(name: s, age: i) {
+        ~ The dot operator without a subject means "this".
+        .name = name;
+        .age = age;
+    }
+
+    ~ Defining a reflexive method. Reflexive methods are marked with the reflexor (@).
+    ~ This method increments the person's score by a given value.
+    @add_score(score: f) {
+        .score += score;
     }
 }
