@@ -18,8 +18,9 @@ Main {
 
             ~ Iterative (synchronous "for") loop.
             ~ The "each" index (,) yields an iterator for every element of the array.
-            ~ The receptacle operator (:=) assigns the iterator's value to a variable.
-            args[,] := arg {
+            ~ TODO: redesign/deep dive into collections notation
+            ~ ^ therefore this is very likely to change
+            arg: s = args[,] {
                 $(arg);
             }
         } ? {
@@ -31,13 +32,14 @@ Main {
     ~ The direct object is a reference type (entity or collection), and can be mutated by the function.
     ~ Indirect objects are optional. This function takes one direct and one indirect object, and has no return type.
     ~ Direct objects are listed after the indirect objects via the accusative operator (|>).
-    ~ The caller has to pass the direct object(s) this way as well, ie: give_name("Bobby") |> bob
+    ~ The caller has to pass the direct object(s) this way as well, ie: give_name("Bobby") |> bob;
     give_name(name: s) |> person: _Person {
         person.name = name;
     }
 
-    ~ Defining a method with a return type
-    fib(n: i) => i {
+    ~ Defining a method with a return type.
+    ~ Return types are annotated with :=
+    fib(n: i) := i {
         n <= 0 ? {
             ~ The return operator is =>
             => 0;
@@ -54,7 +56,7 @@ Main {
     ~ card deck integer array, and repeatedly picks up the next card until
     ~ either the deck is empty, or the limit has been reached.
     ~ It returns the score that was drawn, and whether the limit was hit right on.
-    draw_cards(limit: i) |> cards: [i] => i, b {
+    draw_cards(limit: i) |> cards: [i] := i, b {
         score: i;
 
         ~ Contingent ("do until") loop
