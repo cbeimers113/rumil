@@ -20,7 +20,7 @@ Main {
             // The "each" index (,) yields an iterator for every element of the array.
             // TODO: redesign/deep dive into collections notation
             // ^ therefore this is very likely to change
-            arg: s = args[,] {
+            arg := args[,] {
                 $(arg);
             }
         } ? {
