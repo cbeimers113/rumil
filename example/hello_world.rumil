@@ -26,7 +26,7 @@ Main {
     }
 
     // Recursive Fibonacci sequence
-    fib<i> (n: i) {
+    fib<i> (n<i>) {
         n <= 0 ? {
             >: 0;
         } n <= 2 ? {
@@ -59,7 +59,7 @@ Main {
         person<Person> := +(name, age);
 
         person.age >= 100 ? {
-            .give_name ('{person.name} the Old') |> person;
+            .give_name('{person.name} the Old') |> person;
         }
 
         // update our list and return
@@ -76,14 +76,14 @@ _Person {
     score<f>;
     _ready<b>;
 
-    +(name<s>, age<i>) {
+    + (name<s>, age<i>) {
         // The dot operator without a subject means "this".
         .name = name;
         .age = age;
     }
 
     // A reflexive method that increases the person's score.
-    @add_score(score<f>) {
+    @add_score (score<f>) {
         .score += score;
     }
 }
