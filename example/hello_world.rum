@@ -1,7 +1,7 @@
-Main {
+* {
 
     // The main method
-    +(args<[s]>) {
+    +() {
         $("Hello, world!");
     }
 }
