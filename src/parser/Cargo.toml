@@ -1,0 +1,11 @@
+[package]
+name = "rumil_parser"
+version = "0.1.0"
+edition = "2024"
+authors = ["Chris Beimers"]
+description = "Parser for the Rumil compiler. It produces ASTs from Rumil source code."
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
