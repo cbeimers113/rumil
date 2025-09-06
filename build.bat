@@ -13,6 +13,9 @@ if /I not "%CURRENT_DIR%"=="%ROOT_DIR%" (
     exit /b 1
 )
 
+REM --- Update parser version ---
+python scripts\lib_version.py
+
 REM --- Create build directory ---
 if not exist build (
     mkdir build

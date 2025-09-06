@@ -14,36 +14,9 @@ Rumil aims to accomplish its goals in two ways:
 * By being explicitly designed as a transcompilation target for higher level languages that may be inspired by any human language
 
 ### Design
-- **Paradigm**: Rumil is designed as a general-purpose, multi-paradigm language that supports procedural, object oriented, and functional programming.
-- **Inspirations**: Rumil's features are primarily inspired by Rust, C++, APL, and Python.
+- **Paradigm**: Rumil is designed as a general-purpose, multi-paradigm language that supports procedural and functional programming.
+- **Inspirations**: Rumil's features are primarily inspired by Rust, C++, APL, and Go.
 - **Natural Language Influence**: Rumil has a unique function modeling approach that takes influences from natural linguistics; mutability of arguments is determined through *transitivity* of functions as though they were verbs and their arguments were nouns.
 
 ### Learn Rumil
 See the [docs](./docs/) directory to learn about Rumil's design and features.
-
----
-
-### Project Layout
-```
-rumil/src/
-├── rumil.cpp           <-- rumil binary entry point
-├── rumil.h             <-- include parser FFI
-│
-├── parser/             <-- Rust parser library, produces AST
-│   ├── Cargo.toml
-│   └── src/
-│       ├── lib.rs
-│       └── ...         <-- token.rs, lexer.rs, ast.rs, etc
-│
-├── cli/                <-- handles Rumil CLI invocation
-│   ├── cli.cpp
-│   ├── cli.h
-│   └── ...
-│
-└── compiler/           <-- handles compiling AST from parser
-    ├── cli.cpp
-    ├── cli.h
-    └── ...
-```
-
-To build `rumil`, run the build script for your platform from the project root.
