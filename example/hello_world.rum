@@ -1,7 +1,4 @@
-* {
-
-    // The main method
-    +() {
-        $("Hello, world!");
-    }
+// The main function
+* = () {
+    "Hello world".$
 }
