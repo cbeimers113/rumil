@@ -13,10 +13,10 @@ Rumil aims to accomplish its goals in two ways:
 * By providing a keyword-free yet familiar syntax, and
 * By being explicitly designed as a transcompilation target for higher level languages that may be inspired by any human language
 
-### Paradigm
-Rumil is an object oriented language. Objects in Rumil are called "entities", and classes are called "entity types" or simply "types". This naming scheme is used to differentiate entities from the concept of "objects" as arguments to functions. Rumil has a unique function modeling approach that takes influences from natural linguistics; mutability of arguments is determined through *transitivity* of functions as though they were verbs and their arguments were nouns.
+### Design
+- **Paradigm**: Rumil is designed as a general-purpose, multi-paradigm language that supports procedural and functional programming.
+- **Inspirations**: Rumil's features are primarily inspired by Rust, C++, APL, and Go.
+- **Natural Language Influence**: Rumil has a unique function modeling approach that takes influences from natural linguistics; mutability of arguments is determined through *transitivity* of functions as though they were verbs and their arguments were nouns.
 
 ### Learn Rumil
 See the [docs](./docs/) directory to learn about Rumil's design and features.
-<br>
-**The documentation lists the features planned to be supported by Rumil v1.0.0, which is in active development. As such, the documentation is highly susceptible to change.**
