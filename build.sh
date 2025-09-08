@@ -9,9 +9,6 @@ if [ "$PWD" != "$ROOT_DIR" ]; then
     exit 1
 fi
 
-# Update parser version
-python3 scripts/lib_version.py
-
 mkdir -p build
 cd build
 cmake ..

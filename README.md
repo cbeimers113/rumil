@@ -16,7 +16,6 @@ Rumil aims to accomplish its goals in two ways:
 ### Design
 - **Paradigm**: Rumil is designed as a general-purpose, multi-paradigm language that supports procedural and functional programming.
 - **Inspirations**: Rumil's features are primarily inspired by Rust, C++, APL, and Go.
-- **Natural Language Influence**: Rumil has a unique function modeling approach that takes influences from natural linguistics; mutability of arguments is determined through *transitivity* of functions as though they were verbs and their arguments were nouns.
 
 ### Learn Rumil
 See the [docs](./docs/) directory to learn about Rumil's design and features.

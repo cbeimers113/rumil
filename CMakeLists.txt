@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.31)
 project(rumil)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # --- Detect platform-specific library extension ---
 if(WIN32)
@@ -24,15 +24,6 @@ add_custom_target(rumil_parser ALL
     DEPENDS ${RUST_LIB}
 )
 
-# --- Add external C++ dependencies ---
-include(FetchContent)
-FetchContent_Declare(
-    CLI11
-    GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
-    GIT_TAG v2.5.0
-)
-FetchContent_MakeAvailable(CLI11)
-
 # --- Get version number ---
 file(READ "${CMAKE_SOURCE_DIR}/version" PROJECT_VERSION_RAW)
 string(STRIP "${PROJECT_VERSION_RAW}" PROJECT_VERSION)
@@ -47,7 +38,6 @@ add_dependencies(rumil rumil_parser)
 
 # Link against dependencies
 target_link_libraries(rumil PRIVATE ${RUST_LIB})
-target_link_libraries(rumil PRIVATE CLI11::CLI11)
 
 # Add include dir for rumil.h
 target_include_directories(rumil PRIVATE ${CMAKE_SOURCE_DIR}/include)
