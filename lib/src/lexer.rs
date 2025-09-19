@@ -45,7 +45,7 @@ impl Lexer {
         // Scan tokens based on the type of initial char
         // ---------------------------------------------
 
-        if is_letter(self.cur) {
+        if is_letter(self.cur) || (self.cur == '_' && self.next < self.input.len() && is_alnum(self.input[self.next])) {
             let value = self.read_identifier();
             return self.create_token(TokenType::Identifier, value);
         }
@@ -56,8 +56,16 @@ impl Lexer {
         }
 
         if is_quote(self.cur) {
-            let (token_type, value) = self.read_quote();
-            return self.create_token(token_type, value);
+            let (token_type, value, num_lines) = self.read_quote();
+            let qt: Token = self.create_token(token_type, value);
+
+            // Adjust the line and column pointers for the number of lines that were scanned for this quote
+            if num_lines > 0 {
+                self.line += num_lines;
+                self.col = 0;
+            }
+
+            return qt;
         }
 
         match parse_op(self.cur.to_string().as_str()) {
@@ -126,7 +134,7 @@ impl Lexer {
     /// Read an identifier
     fn read_identifier(&mut self) -> String {
         let start: usize = self.pos;
-        while is_letter(self.cur) {
+        while is_alnum(self.cur) {
             self.read_char();
         }
 
@@ -153,7 +161,7 @@ impl Lexer {
 
     /// Read a quote; scans until the closing quote is found.
     /// If it scans until EOF without finding a close, we have an error.
-    fn read_quote(&mut self) -> (TokenType, String) {
+    fn read_quote(&mut self) -> (TokenType, String, i32) {
         let quote: char = self.cur;
         let line: i32 = self.line;
         let col: i32 = self.col;
@@ -168,6 +176,7 @@ impl Lexer {
         self.read_char();
         let start: usize = self.pos;
         let mut closed = true;
+        let mut num_lines = 0;
 
         // Look back 2 chars to check if we're escaping the next char. Account for escaped backslash
         let mut last = '\u{0}';
@@ -177,6 +186,11 @@ impl Lexer {
             last2 = last;
             last = self.cur;
             self.read_char();
+
+            // Allow multiline strings
+            if self.cur == '\n' {
+                num_lines += 1;
+            }
 
             // If we get to the end of the file without closing the string, log an error
             if self.cur == '\u{0}' {
@@ -203,7 +217,7 @@ impl Lexer {
         }
 
         self.read_char();
-        (token_type, buffer)
+        (token_type, buffer, num_lines)
     }
 
     /// Read a comment: comments are from the opening char until the end of the line (or EOF)
@@ -279,8 +293,10 @@ pub fn scan(source_code: String, file_path: &String) -> Result<Vec<Token>, Strin
     // Log the tokens if debugging
     if debugging() {
         let mut token_strings = String::new();
-        tokens.iter().for_each(|tk| token_strings.push_str(format!("    {}\n", tk).as_str()));
-        log_debug(format!("Tokens:\n{}", token_strings))
+        tokens
+            .iter()
+            .for_each(|tk| token_strings.push_str(format!("{}\n    ", tk).as_str()));
+        log_debug(token_strings);
     }
 
     Ok(tokens)
@@ -304,6 +320,11 @@ fn is_digit(c: char) -> bool {
     '0' <= c && c <= '9'
 }
 
+/// Utility function to tell us if a char is alphanumeric (including underscores)
+fn is_alnum(c: char) -> bool {
+    c == '_' || is_letter(c) || is_digit(c)
+}
+
 /// Utility function to tell us if a char is a quotation mark
 fn is_quote(c: char) -> bool {
     c == '"' || c == '\'' || c == '`'
@@ -311,7 +332,7 @@ fn is_quote(c: char) -> bool {
 
 /// Utility function to tell us if a string is a valid char literal
 fn is_valid_char(c: &str) -> bool {
-    if c.len() == 1 && c != "\\" {
+    if c.len() == 1 && !is_unescaped_char(c) {
         return true;
     }
 
@@ -343,37 +364,32 @@ fn is_valid_unicode_point(u: &str) -> bool {
 /// Utility function to tell us if a literal is a valid escape sequence
 fn is_valid_escaped_char(e: &str) -> bool {
     match e {
-        // Backslash
-        r"\\" => true,
-
-        // Alert
-        r"\a" => true,
-
-        // Backspace
-        r"\b" => true,
-
-        // Page break (form feed)
-        r"\f" => true,
-
-        // Newline (line feed)
-        r"\n" => true,
-
-        // Carriage return
-        r"\r" => true,
-
-        // Horizontal tab
-        r"\t" => true,
-
-        // Vertical tab
-        r"\v" => true,
-
-        // Single quote
-        r"\'" => true,
-
-        // Null char
-        r"\0" => true,
+        r"\\" => true, // Backslash
+        r"\a" => true, // Alert
+        r"\b" => true, // Backspace
+        r"\f" => true, // Page break (form feed)
+        r"\n" => true, // Newline (line feed)
+        r"\r" => true, // Carriage return
+        r"\t" => true, // Horizontal tab
+        r"\v" => true, // Vertical tab
+        r"\'" => true, // Single quote
+        r"\0" => true, // Null char
 
         // Everything else is invalid
+        _ => false,
+    }
+}
+
+/// Utility function to tell us if a literal is an unescaped char
+fn is_unescaped_char(c: &str) -> bool {
+    match c {
+        "\\" => true, // Backslash
+        "\n" => true, // Newline (line feed)
+        "\r" => true, // Carriage return
+        "\t" => true, // Horizontal tab
+        "\'" => true, // Single quote
+        "\0" => true, // Null char
+
         _ => false,
     }
 }
