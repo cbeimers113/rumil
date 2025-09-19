@@ -1,3 +1,7 @@
+#include <iostream>
+
+#include <rumil.h>
+
 #include "cli/cli.hpp"
 
 // Rumil CLI entry point. Packages CLI args and sends them off to invoke the requested logic.

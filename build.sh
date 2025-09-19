@@ -9,7 +9,12 @@ if [ "$PWD" != "$ROOT_DIR" ]; then
     exit 1
 fi
 
-mkdir -p build
+cd lib
+cargo clean
+cd ..
+
+[ -d "build" ] && rm -rf build
+mkdir build
 cd build
 cmake ..
 cmake --build .

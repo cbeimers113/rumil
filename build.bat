@@ -13,10 +13,16 @@ if /I not "%CURRENT_DIR%"=="%ROOT_DIR%" (
     exit /b 1
 )
 
-REM --- Create build directory ---
-if not exist build (
-    mkdir build
+REM --- Clean up existing Rust artifacts ---
+cd lib
+cargo clean
+cd ..
+
+REM --- Create fresh build directory ---
+if exist build (
+    rmdir /s /q build
 )
+mkdir build
 
 cd build
 

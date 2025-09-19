@@ -9,3 +9,5 @@ description = "Parser for the Rumil compiler. It produces ASTs from Rumil source
 crate-type = ["staticlib"]
 
 [dependencies]
+colored = "3.0.0"
+strum_macros = "0.27.2"

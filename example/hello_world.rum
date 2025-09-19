@@ -1,7 +1,2 @@
-* {
-
-    // The main method
-    +() {
-        $("Hello, world!");
-    }
-}
+; Hello world in Rumil
+$("Hello, world!")

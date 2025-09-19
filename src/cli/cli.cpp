@@ -14,17 +14,24 @@ int cmd_build(std::vector<std::string> &);
 // A description of a CLI command
 struct Command
 {
+    // The name to invoke the command on the command line
     std::string identifier;
+
+    // A helpful description of what the command does
     std::string description;
+
+    // The function that is executed on the args when invoke
     std::function<int(std::vector<std::string> &)> callback;
+
+    // Whether the command requires an arg for a target source file
     bool requires_src;
 
     Command(
-        const std::string &id,
-        const std::string &desc,
-        std::function<int(std::vector<std::string> &)> cb,
-        bool req_src)
-        : identifier(id), description(desc), callback(cb), requires_src(req_src) {}
+        const std::string &_identifier,
+        const std::string &_description,
+        std::function<int(std::vector<std::string> &)> _callback,
+        bool _requires_src)
+        : identifier(_identifier), description(_description), callback(_callback), requires_src(_requires_src) {}
 };
 
 // Register the commands
@@ -113,25 +120,24 @@ int cmd_version(std::vector<std::string> &)
     return 0;
 }
 
-// Execute the code in the provided source file
-int cmd_run(std::vector<std::string> &args)
+// ===================
+// Invocation Handling
+// ===================
+
+// Common handler for run, debug and build
+int invoke(ContextType context_type, std::vector<std::string> &args)
 {
-    Context ctx{args, false};
-    std::cout << ctx.string() << "\n";
-    return 0;
+    Context ctx{context_type, args};
+
+    // Parse the code
+    return ctx.parse();
 }
+
+// Execute the code in the provided source file
+int cmd_run(std::vector<std::string> &args) { return invoke(ContextType::RUN, args); }
 
 // Execute the code in the provided source file with runtime logging
-int cmd_debug(std::vector<std::string> &args)
-{
-    Context ctx{args, true};
-    std::cout << ctx.string() << "\n";
-    return 0;
-}
+int cmd_debug(std::vector<std::string> &args) { return invoke(ContextType::DEBUG, args); }
 
 // Compile the code in the provided source file into a binary
-int cmd_build(std::vector<std::string> &)
-{
-    std::cout << "Unimplemented\n";
-    return 1;
-}
+int cmd_build(std::vector<std::string> &args) { return invoke(ContextType::BUILD, args); }
