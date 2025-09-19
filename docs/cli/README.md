@@ -9,6 +9,3 @@ The Rumil CLI is designed to be lightweight and minimal. It includes a handful o
 | `run` | `r` | Executes the given source code* | `rumil run example.rum` | `rumil r example.rum` |
 | `debug` | `d` | Executes the given source code* with runtime logs | `rumil debug example.rum` | `rumil d example.rum` |
 | `build` | `b` | Builds the given source code into an executable binary | `rumil build example.rum` | `rumil b example.rum` |
-
-### *Running a Rumil Source File
-When a Rumil program is run directly with the `run` or `debug` command, the source file must contain exactly one main function. The program's name is determined by the name of the source file that contains the main function. The name of the program and any arguments that were passed to the CLI after the runtime after the file name are passed as part of the invocation metadata.
