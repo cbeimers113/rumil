@@ -1,2 +1,11 @@
 ; Hello world in Rumil
 $("Hello, world!")
+
+; A function
+test() {
+    $("hello")
+
+    a < b ? {
+        $("bye")
+    }
+}

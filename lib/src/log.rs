@@ -15,7 +15,7 @@ pub fn debugging() -> bool {
 }
 
 /// Utility logging function
-fn log(prefix: ColoredString, msg: String, is_error: bool) {
+fn log(prefix: ColoredString, msg: String, is_error: bool) -> String {
     let output: String = format!("{}\n    {}\n", prefix, msg);
 
     if is_error {
@@ -23,23 +23,25 @@ fn log(prefix: ColoredString, msg: String, is_error: bool) {
     } else {
         println!("{}", output);
     }
+
+    output
 }
 
 /// Log a message to stdout
-pub fn log_message(msg: String) {
-    log("[Parser Info]".green().bold(), msg, false);
+pub fn log_message(msg: String) -> String {
+    log("[Parser Info]".green().bold(), msg, false)
 }
 
 /// Log a debugging message to stdout
-pub fn log_debug(msg: String) {
+pub fn log_debug(msg: String) -> String {
     if !debugging() {
-        return;
+        return String::new();
     }
 
-    log("[Parser Debug]".blue().bold(), msg, false);
+    log("[Parser Debug]".blue().bold(), msg, false)
 }
 
 /// Log a message to stderr
-pub fn log_error(msg: String) {
-    log("[Parser Error]".red().bold(), msg, true);
+pub fn log_error(msg: String) -> String {
+    log("[Parser Error]".red().bold(), msg, true)
 }

@@ -1,13 +1,11 @@
 use std::{ffi::CString, os::raw::c_char};
 
-use crate::token::Token;
-
 #[repr(C)]
 pub struct Ast {}
 
 impl Ast {
     /// Create a new C++ compatible AST structure on the heap
-    pub fn new(tokens: Vec<Token>) -> Box<Self> {
+    pub fn new() -> Box<Self> {
         Box::new(Ast {})
     }
 }

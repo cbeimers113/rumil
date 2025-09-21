@@ -1,14 +1,18 @@
 mod ast;
+mod expr;
 mod lexer;
 mod log;
+mod parser;
 mod token;
 
 use std::{ffi::CStr, fs::read_to_string, os::raw::c_char, ptr::null_mut};
 
 use crate::{
     ast::Ast,
+    expr::Expr,
     lexer::scan,
     log::{log_error, log_message, set_debugging},
+    parser::parse,
     token::Token,
 };
 
@@ -46,5 +50,13 @@ pub extern "C" fn parse_file(filepath: *const c_char, verbose: bool) -> *mut Ast
 
     // Parse tokens into syntax tree
     log_message("Parsing tokens...".to_owned());
-    Box::into_raw(Ast::new(tokens))
+    let syntax_tree: Box<dyn Expr> = match parse(tokens, &r_filepath) {
+        Ok(st) => st,
+        Err(msg) => {
+            log_error(msg);
+            return null_mut();
+        }
+    };
+
+    Box::into_raw(Ast::new())
 }

@@ -106,7 +106,7 @@ impl Lexer {
     }
 
     /// Read over whitespace
-    fn skip_whitespace(&mut self) {
+    fn skip_whitespace(&mut self)  {
         while is_whitespace(self.cur) {
             if self.cur == '\n' {
                 self.line += 1;

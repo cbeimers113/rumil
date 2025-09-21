@@ -2,7 +2,7 @@ use std::fmt;
 
 use colored::Colorize;
 
-#[derive(strum_macros::Display, PartialEq)]
+#[derive(strum_macros::Display, PartialEq, Clone)]
 pub enum TokenType {
     // Single-char tokens
     Hash,         // #
@@ -140,6 +140,7 @@ pub fn parse_op(op: &str) -> Option<TokenType> {
     }
 }
 
+#[derive(Clone)]
 pub struct Token {
     pub token_type: TokenType,
     pub value: String,
@@ -159,13 +160,16 @@ impl Token {
     }
 }
 
-/// Allow pretty-printing of Tokens
+/// Pretty-printing for Tokens
 impl fmt::Display for Token {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
             "{} {} ({}, {})",
-            self.value.bold(), format!("{}", self.token_type).italic(), self.line, self.col
+            self.value.bold(),
+            format!("{}", self.token_type).italic(),
+            self.line,
+            self.col
         )
     }
 }
